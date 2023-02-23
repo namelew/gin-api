@@ -6,6 +6,7 @@ import (
 )
 
 func HandleRequests(r *gin.Engine) {
-	r.GET("/alunos", controllers.Get)
+	r.GET("/alunos", controllers.GetALL)
+	r.GET("/alunos/:id", controllers.Get)
 	r.POST("/alunos", controllers.Create)
 }

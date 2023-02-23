@@ -6,15 +6,20 @@ import (
 )
 
 type AlunosController struct {
-	alunos []models.Aluno
 }
 
 func (a *AlunosController) GetALL() []models.Aluno {
-	return append(a.alunos, models.Aluno{Nome: "Diogo", CPF: "00000000000", RG: "111111"}, models.Aluno{Nome: "Ana", CPF: "00000000000", RG: "111111"})
+	var alunos []models.Aluno
+	database.DB.Find(&alunos)
+	return alunos
 }
 
-func (a *AlunosController) Get(key models.Aluno) []models.Aluno {
-	return a.alunos
+func (a *AlunosController) Get(id int) *models.Aluno {
+	var aluno models.Aluno
+
+	database.DB.Find(&aluno, id)
+
+	return &aluno
 }
 
 func (a *AlunosController) Add(aluno *models.Aluno) error {

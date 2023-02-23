@@ -13,3 +13,8 @@ func Get(c *gin.Context) {
 		c.JSON(200, alunosCRL.GetALL())
 	}
 }
+
+func Saudacao(c *gin.Context) {
+	nome := c.Params.ByName("nome")
+	c.JSON(200, gin.H{"API diz": "Olá " + nome + ", tudo bom?"})
+}

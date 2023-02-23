@@ -50,11 +50,28 @@ func Create(c *gin.Context) {
 			return
 		}
 
-		if err := alunosCRL.Add(&aluno); err != nil {
+		if err := alunosCRL.Add(aluno); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 
 		c.JSON(http.StatusOK, aluno)
+	}
+}
+
+func Delete(c *gin.Context) {
+	switch c.Request.URL.String()[:7] {
+	case "/alunos":
+		id := c.Params.ByName("id")
+		key, err := strconv.Atoi(id)
+
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		alunosCRL.Delete(key)
+
+		c.JSON(http.StatusOK, gin.H{"data": "aluno deletado com sucesso"})
 	}
 }

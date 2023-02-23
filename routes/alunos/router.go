@@ -8,5 +8,6 @@ import (
 func HandleRequests(r *gin.Engine) {
 	r.GET("/alunos", controllers.GetALL)
 	r.GET("/alunos/:id", controllers.Get)
+	r.DELETE("/alunos/:id", controllers.Delete)
 	r.POST("/alunos", controllers.Create)
 }

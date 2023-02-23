@@ -30,15 +30,16 @@ func (a *AlunosController) Get(id int) (*models.Aluno, error) {
 	return &aluno, nil
 }
 
-func (a *AlunosController) Add(aluno *models.Aluno) error {
-	database.DB.Create(aluno)
+func (a *AlunosController) Add(aluno models.Aluno) error {
+	go database.DB.Create(&aluno)
 	return nil
 }
 
-func (a *AlunosController) Update(old models.Aluno, new models.Aluno) {
+func (a *AlunosController) Update(id int, new models.Aluno) {
 
 }
 
-func (a *AlunosController) Delete(key models.Aluno) {
-
+func (a *AlunosController) Delete(id int) {
+	var aluno models.Aluno
+	go database.DB.Delete(&aluno, id)
 }

@@ -1,6 +1,9 @@
 package alunos
 
-import "github.com/namelew/gin-api/models"
+import (
+	"github.com/namelew/gin-api/database"
+	"github.com/namelew/gin-api/models"
+)
 
 type AlunosController struct {
 	alunos []models.Aluno
@@ -14,8 +17,9 @@ func (a *AlunosController) Get(key models.Aluno) []models.Aluno {
 	return a.alunos
 }
 
-func (a *AlunosController) Add(student models.Aluno) {
-
+func (a *AlunosController) Add(aluno *models.Aluno) error {
+	database.DB.Create(aluno)
+	return nil
 }
 
 func (a *AlunosController) Update(old models.Aluno, new models.Aluno) {

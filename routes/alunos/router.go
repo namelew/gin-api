@@ -7,4 +7,5 @@ import (
 
 func HandleRequests(r *gin.Engine) {
 	r.GET("/alunos", controllers.Get)
+	r.POST("/alunos", controllers.Create)
 }

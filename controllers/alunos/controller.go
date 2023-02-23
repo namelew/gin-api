@@ -3,15 +3,15 @@ package alunos
 import "github.com/namelew/gin-api/models"
 
 type AlunosController struct {
-	students []models.Aluno
+	alunos []models.Aluno
 }
 
 func (a *AlunosController) GetALL() []models.Aluno {
-	return append(a.students, models.Aluno{Id: 1, Name: "Diogo"})
+	return append(a.alunos, models.Aluno{Id: 1, Nome: "Diogo", CPF: "00000000000", RG: "111111"}, models.Aluno{Id: 2, Nome: "Ana", CPF: "00000000000", RG: "111111"})
 }
 
 func (a *AlunosController) Get(key models.Aluno) []models.Aluno {
-	return a.students
+	return a.alunos
 }
 
 func (a *AlunosController) Add(student models.Aluno) {

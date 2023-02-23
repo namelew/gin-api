@@ -7,5 +7,4 @@ import (
 
 func HandleRequests(r *gin.Engine) {
 	r.GET("/alunos", controllers.Get)
-	r.GET("/:nome", controllers.Saudacao)
 }

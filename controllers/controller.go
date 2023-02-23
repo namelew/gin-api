@@ -26,9 +26,17 @@ func Get(c *gin.Context) {
 
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
 		}
 
-		c.JSON(http.StatusOK, alunosCRL.Get(key))
+		ret, err := alunosCRL.Get(key)
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, ret)
 	}
 }
 

@@ -19,8 +19,9 @@ func GetALL(c *gin.Context) {
 }
 
 func Get(c *gin.Context) {
-	switch c.Request.URL.String()[:7] {
-	case "/alunos":
+	url := c.Request.URL.String()
+	switch {
+	case url[:7] == "alunos/":
 		id := c.Params.ByName("id")
 		key, err := strconv.Atoi(id)
 
@@ -60,8 +61,9 @@ func Create(c *gin.Context) {
 }
 
 func Delete(c *gin.Context) {
-	switch c.Request.URL.String()[:7] {
-	case "/alunos":
+	url := c.Request.URL.String()
+	switch {
+	case url[:7] == "/alunos":
 		id := c.Params.ByName("id")
 		key, err := strconv.Atoi(id)
 

@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/namelew/gin-api/controllers/alunos"
+	"github.com/namelew/gin-api/database"
 	"github.com/namelew/gin-api/models"
 )
 
@@ -101,4 +102,17 @@ func Update(c *gin.Context) {
 
 		c.JSON(http.StatusOK, new)
 	}
+}
+
+func BuscaCPF(c *gin.Context) {
+	cpf := c.Param("cpf")
+	var aluno models.Aluno
+	database.DB.Where(models.Aluno{CPF: cpf}).First(&aluno)
+
+	if aluno.CPF == "" {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Aluno não encontrado"})
+		return
+	}
+
+	c.JSON(http.StatusOK, aluno)
 }

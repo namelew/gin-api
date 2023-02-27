@@ -36,7 +36,9 @@ func (a *AlunosController) Add(aluno models.Aluno) error {
 }
 
 func (a *AlunosController) Update(id int, new models.Aluno) {
-
+	var aluno models.Aluno
+	database.DB.Find(&aluno, id)
+	go database.DB.Model(&aluno).UpdateColumns(new)
 }
 
 func (a *AlunosController) Delete(id int) {

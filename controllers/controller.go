@@ -21,7 +21,7 @@ func GetALL(c *gin.Context) {
 func Get(c *gin.Context) {
 	url := c.Request.URL.String()
 	switch {
-	case url[:7] == "alunos/":
+	case url[:7] == "/alunos":
 		id := c.Params.ByName("id")
 		key, err := strconv.Atoi(id)
 
@@ -75,5 +75,30 @@ func Delete(c *gin.Context) {
 		alunosCRL.Delete(key)
 
 		c.JSON(http.StatusOK, gin.H{"data": "aluno deletado com sucesso"})
+	}
+}
+
+func Update(c *gin.Context) {
+	url := c.Request.URL.String()
+
+	switch {
+	case url[:7] == "/alunos":
+		var new models.Aluno
+		id := c.Params.ByName("id")
+
+		key, err := strconv.Atoi(id)
+
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		}
+
+		if err := c.ShouldBindJSON(&new); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		alunosCRL.Update(key, new)
+
+		c.JSON(http.StatusOK, new)
 	}
 }

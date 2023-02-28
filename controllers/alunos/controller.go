@@ -10,20 +10,18 @@ import (
 type AlunosController struct {
 }
 
-var emptyAluno models.Aluno
-
-func (a *AlunosController) GetALL(filter models.Aluno) []models.Aluno {
+func (a *AlunosController) GetALL(filter models.Aluno) ([]models.Aluno, error) {
 	var alunos []models.Aluno
-	database.DB.Where(&filter).Find(&alunos)
-	return alunos
+	if err := (database.DB.Where(&filter).Find(&alunos)).Error; err != nil {
+		return nil, err
+	}
+	return alunos, nil
 }
 
 func (a *AlunosController) Get(id int) (*models.Aluno, error) {
 	var aluno models.Aluno
 
-	database.DB.Find(&aluno, id)
-
-	if aluno == emptyAluno {
+	if err := (database.DB.Find(&aluno, id)); err != nil {
 		return nil, errors.New("aluno não encontrado")
 	}
 
@@ -31,17 +29,23 @@ func (a *AlunosController) Get(id int) (*models.Aluno, error) {
 }
 
 func (a *AlunosController) Add(aluno models.Aluno) error {
-	go database.DB.Create(&aluno)
+	if err := (database.DB.Create(&aluno)).Error; err != nil {
+		return err
+	}
 	return nil
 }
 
-func (a *AlunosController) Update(id int, new models.Aluno) {
+func (a *AlunosController) Update(id int, new models.Aluno) error {
 	var aluno models.Aluno
-	database.DB.Find(&aluno, id)
-	go database.DB.Model(&aluno).UpdateColumns(new)
+
+	if err := (database.DB.Find(&aluno, id)).Error; err != nil {
+		return err
+	}
+
+	return (database.DB.Model(&aluno).UpdateColumns(new)).Error
 }
 
-func (a *AlunosController) Delete(id int) {
+func (a *AlunosController) Delete(id int) error {
 	var aluno models.Aluno
-	go database.DB.Delete(&aluno, id)
+	return (database.DB.Delete(&aluno, id)).Error
 }

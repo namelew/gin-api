@@ -21,7 +21,14 @@ func GetALL(c *gin.Context) {
 			return
 		}
 
-		c.JSON(200, alunosCRL.GetALL(aluno))
+		alunos, err := alunosCRL.GetALL(aluno)
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(200, alunos)
 	}
 }
 
@@ -63,7 +70,7 @@ func Create(c *gin.Context) {
 			return
 		}
 
-		c.JSON(http.StatusOK, aluno)
+		c.JSON(http.StatusOK, gin.H{"data": "aluno criado com sucesso"})
 	}
 }
 
@@ -79,7 +86,10 @@ func Delete(c *gin.Context) {
 			return
 		}
 
-		alunosCRL.Delete(key)
+		if err := alunosCRL.Delete(key); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
 
 		c.JSON(http.StatusOK, gin.H{"data": "aluno deletado com sucesso"})
 	}
@@ -97,6 +107,7 @@ func Update(c *gin.Context) {
 
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
 		}
 
 		if err := c.ShouldBindJSON(&new); err != nil {
@@ -104,8 +115,11 @@ func Update(c *gin.Context) {
 			return
 		}
 
-		alunosCRL.Update(key, new)
+		if err := alunosCRL.Update(key, new); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
 
-		c.JSON(http.StatusOK, new)
+		c.JSON(http.StatusOK, gin.H{"data": "aluno atualizado com sucesso"})
 	}
 }

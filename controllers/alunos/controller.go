@@ -12,9 +12,9 @@ type AlunosController struct {
 
 var emptyAluno models.Aluno
 
-func (a *AlunosController) GetALL() []models.Aluno {
+func (a *AlunosController) GetALL(filter models.Aluno) []models.Aluno {
 	var alunos []models.Aluno
-	database.DB.Find(&alunos)
+	database.DB.Where(&filter).Find(&alunos)
 	return alunos
 }
 

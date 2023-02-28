@@ -6,7 +6,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/namelew/gin-api/controllers/alunos"
-	"github.com/namelew/gin-api/database"
 	"github.com/namelew/gin-api/models"
 )
 
@@ -15,7 +14,14 @@ var alunosCRL alunos.AlunosController
 func GetALL(c *gin.Context) {
 	switch c.Request.URL.String() {
 	case "/alunos":
-		c.JSON(200, alunosCRL.GetALL())
+		var aluno models.Aluno
+
+		if err := c.ShouldBindJSON(&aluno); err != nil && err.Error() != "EOF" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(200, alunosCRL.GetALL(aluno))
 	}
 }
 
@@ -102,17 +108,4 @@ func Update(c *gin.Context) {
 
 		c.JSON(http.StatusOK, new)
 	}
-}
-
-func BuscaCPF(c *gin.Context) {
-	cpf := c.Param("cpf")
-	var aluno models.Aluno
-	database.DB.Where(models.Aluno{CPF: cpf}).First(&aluno)
-
-	if aluno.CPF == "" {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Aluno não encontrado"})
-		return
-	}
-
-	c.JSON(http.StatusOK, aluno)
 }
